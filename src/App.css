@@ -1,0 +1,60 @@
+body {
+  background-color: #121212; /* Темный фон */
+  color: #ffffff; /* Белый текст */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: #1c1c1c; /* Темный цвет основного контейнера */
+}
+
+.race-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #292929;
+  border-bottom: 1px solid #333;
+}
+
+.race-header h1 {
+  margin: 0;
+  font-size: 24px;
+  white-space: nowrap; /* Запрещаем перенос строки */
+  overflow: hidden; /* Обрезаем содержимое */
+  text-overflow: ellipsis; /* Добавляем многоточие */
+  max-width: 60%; /* Ограничиваем максимальную ширину */
+}
+
+.elapsed-time {
+  font-size: 20px;
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .race-header h1 {
+    font-size: 18px; /* Уменьшение шрифта для мобильных */
+    max-width: 50%; /* Еще большее ограничение ширины */
+  }
+
+  .elapsed-time {
+    font-size: 16px; /* Уменьшение шрифта для таймера */
+  }
+
+  .race-table thead {
+    display: none;
+  }
+}
+

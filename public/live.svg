@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 64 64"
+   version="1.1"
+   id="svg2"
+   sodipodi:docname="timer2.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="namedview2"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="11.875"
+     inkscape:cx="32"
+     inkscape:cy="31.957895"
+     inkscape:window-width="1392"
+     inkscape:window-height="1212"
+     inkscape:window-x="823"
+     inkscape:window-y="176"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <g
+     data-name="Layer 3"
+     id="g2">
+    <!-- желтая заливка внутри окружности -->
+    <circle
+       cx="32.968422"
+       cy="35.12632"
+       fill="#ffd400"
+       id="circle1"
+       r="23.915791"
+       style="stroke-width:1.1958" />
+    <!-- существующие линии поверх -->
+    <path
+       d="M26.71,12a23.52,23.52,0,0,1,5-.74v1.17a1,1,0,0,0,2,0V11.21a23.75,23.75,0,0,1,10,2.68l-.6,1a1,1,0,0,0,1.73,1l.6-1a24.09,24.09,0,0,1,7.38,7.33l-1.09.63a1,1,0,0,0,1,1.73l1.1-.64A23.72,23.72,0,0,1,56.62,34H55.29a1,1,0,0,0,0,2h1.33a23.74,23.74,0,0,1-2.69,10.11l-1.19-.69a1,1,0,1,0-1,1.73l1.19.68a24.1,24.1,0,0,1-7.41,7.41l-.7-1.21a1,1,0,0,0-1.73,1l.7,1.21A23.74,23.74,0,0,1,33.66,59v-1.4a1,1,0,0,0-2,0V59a23.51,23.51,0,0,1-4.95-.74,1,1,0,0,0-.51,1.93A25.9,25.9,0,0,0,51.6,17.35l2.1-2.1.83.83a1,1,0,0,0,1.41,0l3-3a1,1,0,0,0,0-1.41L55.77,8.47a1,1,0,0,0-1.41,0l-3,3a1,1,0,0,0,0,1.41l.94.94-2.11,2.11A25.84,25.84,0,0,0,36.25,9.43v-1h2.66a1,1,0,0,0,1-1V4a1,1,0,0,0-1-1H27.21a1,1,0,0,0-1,1V7.47a1,1,0,0,0,1,1h2.66v.88A25.23,25.23,0,0,0,26.2,10,1,1,0,0,0,26.71,12Z"
+       id="path1" />
+    <path
+       d="M19.08 19.07h5.48a1 1 0 1 0 0-2H19.08a1 1 0 0 0 0 2zM14.78 25.88H24a1 1 0 0 0 0-2H14.78a1 1 0 0 0 0 2zM10.57 32.69H24.29a1 1 0 1 0 0-2H10.57a1 1 0 1 0 0 2zM5.75 39.49H24.57a1 1 0 1 0 0-2H5.75a1 1 0 0 0 0 2zM24.58 45.3a1 1 0 0 0-1-1H10.94a1 1 0 0 0 0 2H23.58A1 1 0 0 0 24.58 45.3zM19.08 53.11h5.48a1 1 0 1 0 0-2H19.08a1 1 0 0 0 0 2zM32.69 38.52a3.59 3.59 0 0 0 2.13-.7l.1-.09 10.26-9.92a1 1 0 0 0-1.09-1.64L31.78 31.47l-1 .44a.94.94 0 0 0-.2.11 3.6 3.6 0 0 0 2.14 6.5zM31.1 34.68a1.59 1.59 0 0 1 .55-1l8.21-3.53-6.28 6.08a1.6 1.6 0 0 1-2.48-1.57z"
+       id="path2" />
+  </g>
+</svg>

@@ -1,0 +1,30 @@
+.footer {
+  padding: 15px 20px;
+  margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.footer-link {
+  color: #ffffff;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-link:hover {
+  opacity: 0.7;
+  transform: scale(1.1);
+}
+
+.footer-icon {
+  width: 24px;
+  height: 24px;
+  fill: #ffffff;
+}

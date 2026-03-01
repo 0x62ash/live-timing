@@ -1,0 +1,79 @@
+.lap-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 200px; /* Ширина для десктопа */
+  height: 100vh;
+  color: #e0e0e0; /* Светлый текст */
+  background-color: #1e1e1e; /* Темный фон сайдбара */
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  z-index: 1000;
+  transition: transform 0.3s ease; /* Плавное открытие */
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #f5c518; /* Желтый акцент */
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+
+.stint-group {
+  border-top: 1px solid #444;
+  border-bottom: 1px solid #444;
+}
+
+.stint-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: #2a2a2a;
+  border-bottom: 1px solid #444;
+}
+
+.stint-number {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-right: 12px;
+}
+
+.stint-stats {
+  flex: 1;
+  font-size: 0.85em;
+  color: #aaa;
+  line-height: 1.4;
+}
+
+.stint-laps {
+  padding: 8px 12px;
+  margin: 0;
+  list-style: none;
+}
+
+.lap-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.lap-number {
+  text-align: left;
+}
+
+.lap-time {
+  text-align: right;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+  .lap-sidebar {
+    width: 40%;
+  }
+}

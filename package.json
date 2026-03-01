@@ -1,0 +1,31 @@
+{
+  "name": "live-app",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "/live",
+  "type": "module",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitejs/plugin-react": "^4.3.0",
+    "happy-dom": "^20.7.0",
+    "vite": "^5.4.0",
+    "vitest": "^4.0.18",
+    "ws": "^8.19.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "mock-server": "node tests/mock-ws-server.js",
+    "mock-server:fast": "node tests/mock-ws-server.js --delay 100"
+  }
+}
