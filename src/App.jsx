@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import RaceTable from './RaceTable.jsx';
 import LapSidebar from './LapSidebar.jsx';
 import Footer from './Footer.jsx';
@@ -8,16 +8,24 @@ const App = () => {
     const [raceData, setRaceData] = useState({ id: 0, name: '', elapsed: 0, drivers: [] });
     const [selectedDriver, setSelectedDriver] = useState(null);
     const [lastServerUpdate, setLastServerUpdate] = useState(Date.now());
+    const [wsStatus, setWsStatus] = useState('disconnected');
+    const wsRef = useRef(null);
+    const reconnectTimeoutRef = useRef(null);
+    const reconnectAttemptsRef = useRef(0);
 
   useEffect(() => {
     const dev = (new URLSearchParams(window.location.search)).get('dev');
     const ws = !!dev
       ? new WebSocket('ws://' + window.location.hostname + ':9001')
       : new WebSocket('wss://' + window.location.hostname + '/ws');
+    
+    wsRef.current = ws;
 
     ws.onopen = () => {
       console.log('WebSocket соединение установлено');
-      // Отправляем сообщение при открытии соединения
+      setWsStatus('connected');
+      reconnectAttemptsRef.current = 0;
+      
       if (!!dev) {
         ws.send(dev);
       } else {
@@ -94,11 +102,44 @@ const App = () => {
       });
     };
 
-    ws.onclose = () => console.log('WebSocket закрыт');
-    ws.onerror = (error) => console.error('WebSocket ошибка', error);
+    const attemptReconnect = () => {
+      if (reconnectAttemptsRef.current < 3) {
+        console.log(`Попытка переподключения ${reconnectAttemptsRef.current + 1}/3`);
+        reconnectAttemptsRef.current += 1;
+        
+        reconnectTimeoutRef.current = setTimeout(() => {
+          const newWs = !!dev
+            ? new WebSocket('ws://' + window.location.hostname + ':9001')
+            : new WebSocket('wss://' + window.location.hostname + '/ws');
+          wsRef.current = newWs;
+          
+          newWs.onopen = ws.onopen;
+          newWs.onmessage = ws.onmessage;
+          newWs.onclose = ws.onclose;
+          newWs.onerror = ws.onerror;
+        }, 3000);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket закрыт');
+      setWsStatus('disconnected');
+      if (reconnectAttemptsRef.current < 3) {
+        attemptReconnect();
+      } else {
+        console.log('Максимум попыток переподключения исчерпан');
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket ошибка', error);
+      setWsStatus('error');
+    };
 
     return () => {
-      ws.close();
+      if (wsRef.current) {
+        wsRef.current.close();
+      }
     };
   }, []);
 
@@ -131,7 +172,13 @@ const App = () => {
     <div className="app-container">
       <header className="race-header">
         <h1>{raceData.name}</h1>
-        <span className="elapsed-time">{formatElapsedTime(raceData.elapsed)}</span>
+        <div className="header-right">
+          <span className="elapsed-time">{formatElapsedTime(raceData.elapsed)}</span>
+          <span 
+            className={`ws-status ws-status--${wsStatus}`} 
+            title={wsStatus}
+          />
+        </div>
       </header>
       <div className="main-content">
         <RaceTable 

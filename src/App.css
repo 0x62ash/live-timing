@@ -35,12 +35,55 @@ body {
   white-space: nowrap; /* Запрещаем перенос строки */
   overflow: hidden; /* Обрезаем содержимое */
   text-overflow: ellipsis; /* Добавляем многоточие */
-  max-width: 60%; /* Ограничиваем максимальную ширину */
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .elapsed-time {
   font-size: 20px;
   color: #ffffff;
+}
+
+.ws-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 10px;
+  border: 2px solid #fff;
+}
+
+.ws-status--connecting {
+  background-color: #f1c40f;
+  animation: pulse 1.5s infinite;
+}
+
+.ws-status--connected {
+  background-color: #2ecc71;
+}
+
+.ws-status--disconnected,
+.ws-status--error {
+  background-color: #95a5a6;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @media (max-width: 600px) {
