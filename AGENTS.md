@@ -89,3 +89,17 @@ npm run mock-server:fast  # Start mock server (100ms delay for fast testing)
 - Vitest 4 for testing with happy-dom environment
 - ES modules (`"type": "module"` in package.json)
 - No ESLint/Prettier configured
+
+## Insights (auto)
+
+- 2026-03-06 [Pitfall] React hooks (useState, useRef, etc.) cannot be called inside 
+  Rule: Always declare all React hooks (useState, useRef, useEffect, etc.) at the top level of the component function, before any useEffect callbacks.
+
+- 2026-03-06 [Pattern] When a counter value needs to be read synchronously in event handlers
+  Rule: For counters/flags that are read synchronously in event callbacks, prefer useRef over useState to avoid stale closure issues.
+
+- 2026-03-06 [Pattern] Implement bounded WebSocket reconnection by storing connection logic and attempt counter in refs, checking limits before each retry.
+  Rule: When implementing reconnection logic, use refs for mutable state that persists across async callbacks and implement explicit retry limits.
+
+- 2026-03-06 [Pattern] To group multiple elements on the right side of a flex container while keeping one element on the left, wrap right-side elements in a child div.
+  Rule: For two-sided layouts (left content, right grouped controls), use a wrapper div for the right-side group with flexbox.
