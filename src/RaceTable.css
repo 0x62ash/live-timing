@@ -1,8 +1,10 @@
 .race-table {
-  width: 100%;
   border-collapse: collapse;
-  background-color: #1e1e1e; /* Темный фон таблицы */
-  color: #e0e0e0; /* Светлый текст */
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  table-layout: auto;
+  width: fit-content;
+  display: block;
 }
 
 th, td {
@@ -10,54 +12,77 @@ th, td {
   text-align: left;
 }
 
-tr:nth-child(even) {
-  background-color: #1a1a1a; /* Чередование для улучшения читаемости */
+.race-table tbody tr:hover:not(.selected) {
+  background-color: #333;
 }
 
-tr:hover {
-  background-color: #333; /* Подсветка при наведении */
-}
-
-tr.selected {
-  background-color: #375a7f !important; /* Приглушенный синий для выбранной строки */
+.race-table tbody tr.selected {
+  background-color: #375a7f !important;
   color: white;
+  outline: 2px solid var(--driver-color, #666);
+  outline-offset: -2px;
+  box-shadow: inset 4px 0 0 0 var(--driver-color, #666);
+  position: relative;
+  z-index: 1;
 }
 
-tr.selected:hover {
-  background-color: #2c4663 !important; /* Более темный синий при наведении */
+.race-table tbody tr:nth-child(even):not(.selected) {
+  background-color: #1a1a1a;
 }
+
+.race-table tbody tr.selected:hover {
+  background-color: #2c4663 !important;
+}
+
+
 
 th {
-  background-color: #292929; /* Темный цвет заголовков */
+  background-color: #292929;
+  color: #888;
 }
 
-td {
+.race-table td, .race-table th {
   border-bottom: 1px solid #333;
+}
+
+.race-table td.fit, .race-table th.fit {
+  width: 5%;
+  white-space: nowrap;
+}
+
+.race-table td.dname, .race-table th.dname {
+  min-width: 200px;
 }
 
 span.lapTime {
   font-weight: bold;
 }
+
+span.lapTime.best-lap {
+  color: #ffd700;
+  font-weight: 800;
+}
+
 span.better {
-  color: #4caf50;
+  color: #66bb6a;
 }
+
 span.worse {
-  color: #f5c518;
-}
-span.delta{
- margin-left: 5px;
- font-size: 0.8em;
+  color: #ffa726;
 }
 
-td.fit, th.fit {
-  width: 0px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+span.delta {
+  margin-left: 5px;
+  font-size: 0.8em;
+  color: #90a4ae;
 }
 
-td.dname, th.dname {
-  width: 200px;
+
+
+.race-table tbody tr {
+  box-shadow: inset 4px 0 0 0 var(--driver-color, #666);
+  display: table-row;
+  position: relative;
 }
 
 

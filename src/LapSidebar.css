@@ -16,12 +16,21 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  color: #f5c518; /* Желтый акцент */
+  color: #f5c518;
   background: none;
   border: none;
   font-size: 20px;
   cursor: pointer;
   line-height: 1;
+}
+
+.driver-name {
+  background-color: var(--driver-color, #666);
+  padding: 12px;
+  margin: 0;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 
@@ -31,8 +40,6 @@
 }
 
 .stint-header {
-  display: flex;
-  align-items: center;
   padding: 8px 12px;
   background: #2a2a2a;
   border-bottom: 1px solid #444;
@@ -41,14 +48,16 @@
 .stint-number {
   font-weight: bold;
   font-size: 1.2em;
-  margin-right: 12px;
+  display: block;
 }
 
 .stint-stats {
-  flex: 1;
-  font-size: 0.85em;
+  display: block;
+  font-size: 0.75em;
   color: #aaa;
   line-height: 1.4;
+  font-weight: normal;
+  margin-top: 4px;
 }
 
 .stint-laps {
@@ -74,6 +83,22 @@
 /* Адаптация для мобильных устройств */
 @media (max-width: 768px) {
   .lap-sidebar {
-    width: 40%;
+    width: 25%;
+  }
+
+  .driver-name {
+    font-size: 14px;
+  }
+
+  .stint-number {
+    font-size: 1em;
+  }
+
+  .stint-stats {
+    font-size: 0.75em;
+  }
+
+  .lap-item {
+    font-size: 13px;
   }
 }

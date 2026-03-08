@@ -1,5 +1,6 @@
 import React from 'react';
 import './RaceTable.css';
+import { getDriverColor } from './utils/driver-colors';
 
 const formatLapTime = (milliseconds) => {
   return milliseconds ? (milliseconds / 1000).toFixed(3) : '';
@@ -26,9 +27,13 @@ const renderLapTime = (driver, bestTime) => {
     className = 'worse';
   }
 
+  const isBest = lastLap.time === bestTime;
+
   return (
     <span>
-      <span className={`lapTime ${className}`}>{formatLapTime(lastLap.time)}</span>
+      <span className={`lapTime ${className} ${isBest ? 'best-lap' : ''}`}>
+        {formatLapTime(lastLap.time)}
+      </span>
       {renderLapTimePaceDelta(lastLap.time, bestTime)}
     </span>
   );
@@ -118,18 +123,20 @@ const RaceTable = ({ heatMode, drivers, onDriverSelect, selectedDriver }) => {
           { heatMode === 1 &&
           <th className="fit">Лучшее</th>
           }
-          { heatMode === 0 &&
-          <th className="fit">Разрыв</th> }
-          <StintHeaders isShowStint={isShowStint} />
-          <th></th>
-        </tr>
+           { heatMode === 0 &&
+           <th className="fit">Разрыв</th> }
+           <StintHeaders isShowStint={isShowStint} />
+         </tr>
       </thead>
       <tbody>
-        {sortedDrivers.map((driver) => (
+        {sortedDrivers.map((driver, index) => {
+          const driverColor = getDriverColor(driver.driver.name);
+          return (
           <tr 
             key={driver.driver.id} 
             onClick={() => onDriverSelect(driver)}
-            className={selectedDriver?.driver.id === driver.driver.id ? 'selected' : ''}
+            className={`driver-row ${selectedDriver?.driver.id === driver.driver.id ? 'selected' : ''} position-${index + 1}`}
+            style={{ '--driver-color': driverColor.rgb }}
           >
             <td>{driver.position}</td>
             <td>{driver.number}</td>
@@ -145,9 +152,9 @@ const RaceTable = ({ heatMode, drivers, onDriverSelect, selectedDriver }) => {
               driver={driver} 
               currentStintBestAvgTime={currentStintBestAvgTime} 
             />
-            <td></td>
           </tr>
-        ))}
+        );
+        })}
       </tbody>
     </table>
   );

@@ -1,7 +1,9 @@
 import React from 'react';
-import './LapSidebar.css'; // Добавьте отдельный файл CSS для стилизации сайдбара
+import './LapSidebar.css';
+import { getDriverColor } from './utils/driver-colors';
 
 const LapSidebar = ({ driver, onClose }) => {
+  const driverColor = getDriverColor(driver.driver.name);
   const sortedLaps = driver.laps ? [...driver.laps].sort((a, b) => b.number - a.number) : [];
 
   const groupedLaps = sortedLaps.reduce((groups, lap) => {
@@ -26,17 +28,19 @@ const LapSidebar = ({ driver, onClose }) => {
   return (
     <div className="lap-sidebar">
       <button className="close-button" onClick={onClose}>×</button>
-      <h2>{driver.driver.name}</h2>
+      <h2 className="driver-name" style={{ '--driver-color': driverColor.rgb }}>{driver.driver.name}</h2>
       {stintEntries.length === 0 ? (
         <p>Нет данных о кругах</p>
       ) : (
         stintEntries.map(({ stintNum, laps, bestTime, avgTime }) => (
           <div key={stintNum} className="stint-group">
             <div className="stint-header">
-              <span className="stint-number">{stintNum}</span>
-              <span className="stint-stats">
-                Best: {(bestTime / 1000).toFixed(3)}s<br />
-                Avg: {(avgTime / 1000).toFixed(3)}s
+              <span className="stint-number">
+                {stintNum}
+                <span className="stint-stats">
+                  Best: {(bestTime / 1000).toFixed(3)}s<br />
+                  Avg: {(avgTime / 1000).toFixed(3)}s
+                </span>
               </span>
             </div>
             <ul className="stint-laps">

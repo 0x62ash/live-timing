@@ -103,3 +103,15 @@ npm run mock-server:fast  # Start mock server (100ms delay for fast testing)
 
 - 2026-03-06 [Pattern] To group multiple elements on the right side of a flex container while keeping one element on the left, wrap right-side elements in a child div.
   Rule: For two-sided layouts (left content, right grouped controls), use a wrapper div for the right-side group with flexbox.
+
+- 2026-03-08 [Pattern] Shrink tables to content width instead of full viewport width
+  Rule: For tables that should shrink to content, use `table-layout: auto`, `width: fit-content`, and `display: block` together, plus `align-items: flex-start` on the parent flex container.
+
+- 2026-03-08 [Pattern] Prevent table row border overlap with box-shadow
+  Rule: When table rows have colored left borders, use `box-shadow: inset 4px 0 0 0` instead of `border-left` to prevent borders from overlapping adjacent rows.
+
+- 2026-03-08 [Pattern] Selection states without layout shift
+  Rule: Use `outline` with `outline-offset` instead of `border` for selected row states to prevent layout shifting when selection changes.
+
+- 2026-03-08 [Pattern] Readable text on variable colored backgrounds
+  Rule: When background color varies by data (like driver colors), use white text with `font-weight: bold` and `text-shadow` for consistent contrast.

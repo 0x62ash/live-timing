@@ -9,8 +9,12 @@ body {
 .main-content {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: auto;
+  overflow-x: auto;
+  align-items: flex-start;
 }
+
+
 
 .app-container {
   display: flex;
