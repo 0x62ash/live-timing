@@ -61,7 +61,7 @@
 }
 
 .stint-laps {
-  padding: 8px 12px;
+  padding: 0;
   margin: 0;
   list-style: none;
 }
@@ -69,15 +69,29 @@
 .lap-item {
   display: flex;
   justify-content: space-between;
-  padding: 4px 0;
+  padding: 6px 12px;
+  margin: 0;
+  border-radius: 0;
+  background-color: var(--lap-color, rgb(60, 60, 60));
 }
 
 .lap-number {
   text-align: left;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .lap-time {
   text-align: right;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Pitstop lap - highlighted in brighter blue */
+.lap-pitstop {
+  background-color: rgb(60, 140, 200);
 }
 
 /* Адаптация для мобильных устройств */

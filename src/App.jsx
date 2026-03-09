@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import RaceTable from './RaceTable.jsx';
 import LapSidebar from './LapSidebar.jsx';
 import Footer from './Footer.jsx';
@@ -12,8 +12,9 @@ const App = () => {
     const wsRef = useRef(null);
     const reconnectTimeoutRef = useRef(null);
     const reconnectAttemptsRef = useRef(0);
+    const isReconnectingRef = useRef(false);
 
-  useEffect(() => {
+  const connectWebSocket = useCallback(() => {
     const dev = (new URLSearchParams(window.location.search)).get('dev');
     const ws = !!dev
       ? new WebSocket('ws://' + window.location.hostname + ':9001')
@@ -24,7 +25,16 @@ const App = () => {
     ws.onopen = () => {
       console.log('WebSocket соединение установлено');
       setWsStatus('connected');
+      
+      // Если это реконнект - сбрасываем состояние гонки
+      if (isReconnectingRef.current) {
+        console.log('Реконнект успешен, сброс данных гонки');
+        setRaceData({ id: 0, name: '', elapsed: 0, drivers: [] });
+        setSelectedDriver(null);
+      }
+      
       reconnectAttemptsRef.current = 0;
+      isReconnectingRef.current = false;
       
       if (!!dev) {
         ws.send(dev);
@@ -39,15 +49,15 @@ const App = () => {
       setLastServerUpdate(Date.now());
       const data = JSON.parse(event.data);
       setRaceData((prevData) => {
-        // Если изменился id заезда - сбрасываем все старые данные
-        if (data.id !== prevData.id && prevData.id !== 0) {
-          console.log('Начался новый заезд (id:', data.id, '), сброс данных');
+        // Если изменился id заезда или prevData.id === 0 (после реконнекта) - сбрасываем данные
+        if (data.id !== prevData.id) {
+          console.log('Получены данные нового заезда (id:', data.id, '), сброс данных');
           return { 
             id: data.id, 
             name: data.name, 
             mode: data.mode, 
             elapsed: data.elapsed || 0, 
-            drivers: [] 
+            drivers: data.drivers || []
           };
         }
 
@@ -102,30 +112,18 @@ const App = () => {
       });
     };
 
-    const attemptReconnect = () => {
-      if (reconnectAttemptsRef.current < 3) {
-        console.log(`Попытка переподключения ${reconnectAttemptsRef.current + 1}/3`);
-        reconnectAttemptsRef.current += 1;
-        
-        reconnectTimeoutRef.current = setTimeout(() => {
-          const newWs = !!dev
-            ? new WebSocket('ws://' + window.location.hostname + ':9001')
-            : new WebSocket('wss://' + window.location.hostname + '/ws');
-          wsRef.current = newWs;
-          
-          newWs.onopen = ws.onopen;
-          newWs.onmessage = ws.onmessage;
-          newWs.onclose = ws.onclose;
-          newWs.onerror = ws.onerror;
-        }, 3000);
-      }
-    };
-
     ws.onclose = () => {
       console.log('WebSocket закрыт');
       setWsStatus('disconnected');
+      
       if (reconnectAttemptsRef.current < 3) {
-        attemptReconnect();
+        isReconnectingRef.current = true;
+        
+        reconnectTimeoutRef.current = setTimeout(() => {
+          reconnectAttemptsRef.current += 1;
+          console.log(`Попытка переподключения ${reconnectAttemptsRef.current}/3`);
+          connectWebSocket();
+        }, 3000);
       } else {
         console.log('Максимум попыток переподключения исчерпан');
       }
@@ -135,13 +133,20 @@ const App = () => {
       console.error('WebSocket ошибка', error);
       setWsStatus('error');
     };
+  }, []);
+
+  useEffect(() => {
+    connectWebSocket();
 
     return () => {
       if (wsRef.current) {
         wsRef.current.close();
       }
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
     };
-  }, []);
+  }, [connectWebSocket]);
 
   useEffect(() => {
     const interval = setInterval(() => {
