@@ -73,8 +73,10 @@ const StintColumns = ({ isShowStint, driver, currentStintBestAvgTime }) => {
     return (
       <>
         <td>{driver.stint.number}</td>
-        <td colSpan="2" className="mobile-hide" style={{'textAlign': 'center'}}>pit exit</td>
-        <td>{driver.stint.length}</td>
+        <td className="mobile-hide"></td>
+        <td>pit exit</td>
+        <td className="mobile-hide">{driver.stint.length}</td>
+        <td className="mobile-hide"></td>
       </>
     );
   }
