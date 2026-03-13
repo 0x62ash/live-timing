@@ -21,9 +21,12 @@ th, td {
   color: white;
   outline: 2px solid var(--driver-color, #666);
   outline-offset: -2px;
-  box-shadow: inset 4px 0 0 0 var(--driver-color, #666);
   position: relative;
   z-index: 1;
+}
+
+.driver-row td:first-child {
+  box-shadow: inset 4px 0 0 0 var(--driver-color, #666);
 }
 
 .race-table tbody tr:nth-child(even):not(.selected) {
