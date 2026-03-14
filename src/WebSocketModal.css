@@ -1,0 +1,138 @@
+.ws-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ws-modal {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  border-radius: 12px;
+  padding: 40px 60px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.4s ease-out;
+  max-width: 90%;
+  width: 400px;
+}
+
+.ws-modal--failed {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.ws-modal__icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse-warning 1.5s infinite;
+}
+
+.ws-modal__icon--warning {
+  color: #fff;
+}
+
+.ws-modal__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes pulse-warning {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.ws-modal__title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  margin: 0 0 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ws-modal__subtitle {
+  font-size: 16px;
+  color: #fff;
+  margin: 0;
+  opacity: 0.95;
+  line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .ws-modal {
+    padding: 25px 15px;
+    width: 90%;
+    min-width: 280px;
+  }
+
+  .ws-modal__title {
+    font-size: 20px;
+  }
+
+  .ws-modal__subtitle {
+    font-size: 13px;
+  }
+
+  .ws-modal__icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 340px) {
+  .ws-modal {
+    padding: 20px 12px;
+    width: 95%;
+  }
+
+  .ws-modal__title {
+    font-size: 18px;
+  }
+
+  .ws-modal__subtitle {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .ws-modal__icon {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 12px;
+  }
+}

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import RaceTable from './RaceTable.jsx';
 import LapSidebar from './LapSidebar.jsx';
 import Footer from './Footer.jsx';
+import WebSocketModal from './WebSocketModal.jsx';
 import './App.css';
 
 const App = () => {
@@ -9,11 +10,14 @@ const App = () => {
     const [selectedDriver, setSelectedDriver] = useState(null);
     const [lastServerUpdate, setLastServerUpdate] = useState(Date.now());
     const [wsStatus, setWsStatus] = useState('disconnected');
+    const [reconnectAttempts, setReconnectAttempts] = useState(0);
+    const [timeUntilNextReconnect, setTimeUntilNextReconnect] = useState(0);
     const wsRef = useRef(null);
     const reconnectTimeoutRef = useRef(null);
     const reconnectAttemptsRef = useRef(0);
     const isReconnectingRef = useRef(false);
     const reconnectStartTimeRef = useRef(null);
+    const maxReconnectTime = 600 * 1000;
 
   const connectWebSocket = useCallback(() => {
     const dev = (new URLSearchParams(window.location.search)).get('dev');
@@ -26,6 +30,8 @@ const App = () => {
     ws.onopen = () => {
       console.log('WebSocket соединение установлено');
       setWsStatus('connected');
+      setReconnectAttempts(0);
+      setTimeUntilNextReconnect(0);
       
       // Если это реконнект - сбрасываем состояние гонки
       if (isReconnectingRef.current) {
@@ -118,7 +124,6 @@ const App = () => {
       console.log('WebSocket закрыт');
       setWsStatus('disconnected');
       
-      const maxReconnectTime = 600 * 1000;
       const reconnectDelays = [2000, 5000, 10000, 15000, 20000, 30000];
       const jitterFactor = 0.1;
       
@@ -139,6 +144,9 @@ const App = () => {
       const delay = Math.round(baseDelay * jitter);
       
       isReconnectingRef.current = true;
+      
+      setTimeUntilNextReconnect(delay);
+      setReconnectAttempts(reconnectAttemptsRef.current + 1);
       
       reconnectTimeoutRef.current = setTimeout(() => {
         reconnectAttemptsRef.current += 1;
@@ -174,10 +182,14 @@ const App = () => {
         }
         return prevData;
       });
+
+      if (timeUntilNextReconnect > 0 && wsStatus !== 'connected') {
+        setTimeUntilNextReconnect((prev) => Math.max(0, prev - 1000));
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [lastServerUpdate]);
+  }, [lastServerUpdate, timeUntilNextReconnect, wsStatus]);
 
   const formatElapsedTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -193,6 +205,13 @@ const App = () => {
 
   return (
     <div className="app-container">
+      <WebSocketModal 
+        wsStatus={wsStatus}
+        reconnectAttempts={reconnectAttempts}
+        timeUntilNextReconnect={timeUntilNextReconnect}
+        reconnectStartTime={reconnectStartTimeRef.current}
+        maxReconnectTime={maxReconnectTime}
+      />
       <header className="race-header">
         <h1>{raceData.name}</h1>
         <div className="header-right">
