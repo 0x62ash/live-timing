@@ -13,6 +13,7 @@ const App = () => {
     const reconnectTimeoutRef = useRef(null);
     const reconnectAttemptsRef = useRef(0);
     const isReconnectingRef = useRef(false);
+    const reconnectStartTimeRef = useRef(null);
 
   const connectWebSocket = useCallback(() => {
     const dev = (new URLSearchParams(window.location.search)).get('dev');
@@ -34,6 +35,7 @@ const App = () => {
       }
       
       reconnectAttemptsRef.current = 0;
+      reconnectStartTimeRef.current = null;
       isReconnectingRef.current = false;
       
       if (!!dev) {
@@ -116,17 +118,33 @@ const App = () => {
       console.log('WebSocket закрыт');
       setWsStatus('disconnected');
       
-      if (reconnectAttemptsRef.current < 3) {
-        isReconnectingRef.current = true;
-        
-        reconnectTimeoutRef.current = setTimeout(() => {
-          reconnectAttemptsRef.current += 1;
-          console.log(`Попытка переподключения ${reconnectAttemptsRef.current}/3`);
-          connectWebSocket();
-        }, 3000);
-      } else {
-        console.log('Максимум попыток переподключения исчерпан');
+      const maxReconnectTime = 600 * 1000;
+      const reconnectDelays = [2000, 5000, 10000, 15000, 20000, 30000];
+      const jitterFactor = 0.1;
+      
+      if (reconnectAttemptsRef.current === 0) {
+        reconnectStartTimeRef.current = Date.now();
       }
+      
+      const elapsedReconnectTime = Date.now() - reconnectStartTimeRef.current;
+      if (elapsedReconnectTime >= maxReconnectTime) {
+        console.log('Максимум времени переподключения исчерпан');
+        return;
+      }
+      
+      const delayIndex = Math.min(reconnectAttemptsRef.current, reconnectDelays.length - 1);
+      let baseDelay = reconnectDelays[delayIndex];
+      
+      const jitter = 1 - jitterFactor + Math.random() * (2 * jitterFactor);
+      const delay = Math.round(baseDelay * jitter);
+      
+      isReconnectingRef.current = true;
+      
+      reconnectTimeoutRef.current = setTimeout(() => {
+        reconnectAttemptsRef.current += 1;
+        console.log(`Попытка переподключения ${reconnectAttemptsRef.current} (задержка: ${delay}мс)`);
+        connectWebSocket();
+      }, delay);
     };
 
     ws.onerror = (error) => {
