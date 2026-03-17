@@ -91,7 +91,24 @@ const StintColumns = ({ isShowStint, driver, currentStintBestAvgTime }) => {
   );
 };
 
-const RaceTable = ({ heatMode, drivers, onDriverSelect, selectedDriver }) => {
+const PitlaneKartsRow = ({ isShowStint, pitlaneKarts }) => {
+  if (!isShowStint || !pitlaneKarts || pitlaneKarts.length === 0) return null;
+  
+  return (
+    <tr className="pitlane-karts-row">
+      <td colSpan="100%">
+        <span className="pitlane-label">Карты в питлейне:</span>
+        <div className="pitlane-badges">
+          {pitlaneKarts.map((kartNumber) => (
+            <span key={kartNumber} className="pitlane-badge">{kartNumber}</span>
+          ))}
+        </div>
+      </td>
+    </tr>
+  );
+};
+
+const RaceTable = ({ heatMode, drivers, pitlaneKarts, onDriverSelect, selectedDriver }) => {
   const lastLapTimes = drivers.filter(d => d.laps?.length > 0).map(d => d.laps[d.laps.length - 1].time);
   const currentBestTime = lastLapTimes.length > 0 ? Math.min(...lastLapTimes) : undefined;
   
@@ -158,6 +175,12 @@ const RaceTable = ({ heatMode, drivers, onDriverSelect, selectedDriver }) => {
         );
         })}
       </tbody>
+      <tfoot>
+        <PitlaneKartsRow 
+          isShowStint={isShowStint}
+          pitlaneKarts={pitlaneKarts}
+        />
+      </tfoot>
     </table>
   );
 };

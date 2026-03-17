@@ -106,4 +106,36 @@ span.delta {
   }
 }
 
+/* Pitlane Karts Row */
+.pitlane-karts-row {
+  background-color: #2d2d2d;
+}
+
+.pitlane-karts-row td {
+  padding: 8px;
+}
+
+.pitlane-label {
+  font-weight: bold;
+  color: #888;
+  margin-right: 12px;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.pitlane-badges {
+  display: inline-flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.pitlane-badge {
+  background-color: #ff6b35;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
 

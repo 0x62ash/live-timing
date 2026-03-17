@@ -6,7 +6,7 @@ import WebSocketModal from './WebSocketModal.jsx';
 import './App.css';
 
 const App = () => {
-    const [raceData, setRaceData] = useState({ id: 0, name: '', elapsed: 0, drivers: [] });
+    const [raceData, setRaceData] = useState({ id: 0, name: '', elapsed: 0, drivers: [], pitlaneKarts: [] });
     const [selectedDriver, setSelectedDriver] = useState(null);
     const [lastServerUpdate, setLastServerUpdate] = useState(Date.now());
     const [wsStatus, setWsStatus] = useState('disconnected');
@@ -65,7 +65,8 @@ const App = () => {
             name: data.name, 
             mode: data.mode, 
             elapsed: data.elapsed || 0, 
-            drivers: data.drivers || []
+            drivers: data.drivers || [],
+            pitlaneKarts: data.pitlane_karts || []
           };
         }
 
@@ -115,7 +116,8 @@ const App = () => {
           name: data.name, 
           mode: data.mode, 
           elapsed: data.elapsed, 
-          drivers: Array.from(driversMap.values()) 
+          drivers: Array.from(driversMap.values()),
+          pitlaneKarts: data.pitlane_karts || prevData.pitlaneKarts
         };
       });
     };
@@ -226,6 +228,7 @@ const App = () => {
         <RaceTable 
           heatMode={raceData.mode} 
           drivers={raceData.drivers} 
+          pitlaneKarts={raceData.pitlaneKarts}
           onDriverSelect={setSelectedDriver}
           selectedDriver={selectedDriver}
         />
