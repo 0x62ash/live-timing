@@ -136,6 +136,9 @@ span.delta {
   border-radius: 4px;
   font-weight: bold;
   font-size: 12px;
+  min-width: 2ch;
+  text-align: center;
+  display: inline-block;
 }
 
 

@@ -85,7 +85,7 @@ const StintColumns = ({ isShowStint, driver, currentStintBestAvgTime }) => {
       <td>{driver.stint.number}</td>
       <td className="mobile-hide">{driver.stint.length}</td>
       <td>{renderStintAvgTime(driver.stint.avgTime, currentStintBestAvgTime)}</td>      
-      <td className="mobile-hide">{driver.stint.kart}</td>
+      <td className="mobile-hide"><span className="pitlane-badge">{driver.stint.kart}</span></td>
       <td className="mobile-hide">{formatLapTime(driver.stint.bestTime)}</td>
     </>
   );
