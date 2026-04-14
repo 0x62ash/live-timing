@@ -27,6 +27,7 @@ th, td {
 
 .driver-row td:first-child {
   box-shadow: inset 4px 0 0 0 var(--driver-color, #666);
+  padding-left: 8px;
 }
 
 .race-table tbody tr:nth-child(even):not(.selected) {
