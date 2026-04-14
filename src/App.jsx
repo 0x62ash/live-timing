@@ -149,10 +149,10 @@ return {
       isReconnectingRef.current = true;
       
       setTimeUntilNextReconnect(delay);
-      
+      console.log(`Попытка переподключения ${reconnectAttemptsRef.current} (задержка: ${delay}мс)`);
+
       reconnectTimeoutRef.current = setTimeout(() => {
         reconnectAttemptsRef.current += 1;
-        console.log(`Попытка переподключения ${reconnectAttemptsRef.current} (задержка: ${delay}мс)`);
         connectWebSocket();
       }, delay);
     };
