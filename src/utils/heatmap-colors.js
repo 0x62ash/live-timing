@@ -3,16 +3,14 @@
  * Generates colors for lap time visualization (fast = green, slow = red)
  */
 
-// Pitstop threshold in milliseconds (50 seconds)
-export const PITSTOP_THRESHOLD = 50000;
-
 /**
  * Check if a lap is a pitstop lap (exceeds threshold)
  * @param {number} lapTime - Lap time in milliseconds
+ * @param {number} threshold - Pitstop threshold in milliseconds (default: 50000)
  * @returns {boolean}
  */
-export function isPitstopLap(lapTime) {
-  return lapTime && lapTime > PITSTOP_THRESHOLD;
+export function isPitstopLap(lapTime, threshold = 50000) {
+  return lapTime && lapTime > threshold;
 }
 
 /**

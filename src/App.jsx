@@ -6,7 +6,7 @@ import WebSocketModal from './WebSocketModal.jsx';
 import './App.css';
 
 const App = () => {
-    const [raceData, setRaceData] = useState({ id: 0, name: '', elapsed: 0, drivers: [], pitlaneKarts: [] });
+    const [raceData, setRaceData] = useState({ id: 0, name: '', elapsed: 0, drivers: [], pitlaneKarts: [], pitstopTimeThreshold: 50000 });
     const [selectedDriver, setSelectedDriver] = useState(null);
     const [lastServerUpdate, setLastServerUpdate] = useState(Date.now());
     const [wsStatus, setWsStatus] = useState('disconnected');
@@ -56,6 +56,7 @@ const App = () => {
     ws.onmessage = (event) => {
       setLastServerUpdate(Date.now());
       const data = JSON.parse(event.data);
+      
       setRaceData((prevData) => {
         // Если изменился id заезда или prevData.id === 0 (после реконнекта) - сбрасываем данные
         if (data.id !== prevData.id) {
@@ -66,7 +67,8 @@ const App = () => {
             mode: data.mode, 
             elapsed: data.elapsed || 0, 
             drivers: data.drivers || [],
-            pitlaneKarts: data.pitlaneKarts || []
+            pitlaneKarts: data.pitlaneKarts || [],
+            pitstopTimeThreshold: data.pitstopTimeThreshold !== null && data.pitstopTimeThreshold !== undefined ? data.pitstopTimeThreshold : 50000
           };
         }
 
@@ -110,15 +112,16 @@ const App = () => {
           data.elapsed = prevData.elapsed;
         }
 
-        return { 
-          ...prevData, 
-          id: data.id, 
-          name: data.name, 
-          mode: data.mode, 
-          elapsed: data.elapsed, 
-          drivers: Array.from(driversMap.values()),
-          pitlaneKarts: data.pitlaneKarts || prevData.pitlaneKarts
-        };
+return { 
+            ...prevData, 
+            id: data.id, 
+            name: data.name, 
+            mode: data.mode, 
+            elapsed: data.elapsed, 
+            drivers: Array.from(driversMap.values()),
+            pitlaneKarts: data.pitlaneKarts || prevData.pitlaneKarts,
+            pitstopTimeThreshold: data.pitstopTimeThreshold !== null && data.pitstopTimeThreshold !== undefined ? data.pitstopTimeThreshold : prevData.pitstopTimeThreshold
+          };
       });
     };
 
@@ -231,8 +234,9 @@ const App = () => {
           pitlaneKarts={raceData.pitlaneKarts}
           onDriverSelect={setSelectedDriver}
           selectedDriver={selectedDriver}
+          pitstopTimeThreshold={raceData.pitstopTimeThreshold}
         />
-        {selectedDriver && <LapSidebar driver={selectedDriver} onClose={() => setSelectedDriver(null)} />}
+        {selectedDriver && <LapSidebar driver={selectedDriver} onClose={() => setSelectedDriver(null)} pitstopTimeThreshold={raceData.pitstopTimeThreshold} />}
       </div>
       <Footer />
     </div>

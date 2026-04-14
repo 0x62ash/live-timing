@@ -108,7 +108,7 @@ const PitlaneKartsRow = ({ isShowStint, pitlaneKarts }) => {
   );
 };
 
-const RaceTable = ({ heatMode, drivers, pitlaneKarts, onDriverSelect, selectedDriver }) => {
+const RaceTable = ({ heatMode, drivers, pitlaneKarts, onDriverSelect, selectedDriver, pitstopTimeThreshold }) => {
   const lastLapTimes = drivers.filter(d => d.laps?.length > 0).map(d => d.laps[d.laps.length - 1].time);
   const currentBestTime = lastLapTimes.length > 0 ? Math.min(...lastLapTimes) : undefined;
   

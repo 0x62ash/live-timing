@@ -3,7 +3,8 @@ import './LapSidebar.css';
 import { getDriverColor } from './utils/driver-colors';
 import { getHeatmapColor, getPitstopColor, isPitstopLap } from './utils/heatmap-colors';
 
-const LapSidebar = ({ driver, onClose }) => {
+const LapSidebar = ({ driver, onClose, pitstopTimeThreshold }) => {
+  const threshold = pitstopTimeThreshold ?? 50000;
   const driverColor = getDriverColor(driver.driver.name);
   const sortedLaps = driver.laps ? [...driver.laps].sort((a, b) => b.number - a.number) : [];
 
@@ -19,9 +20,9 @@ const LapSidebar = ({ driver, onClose }) => {
       const stintData = driver.stint || {};
       
       // Фильтруем обычные круги (без пит-стопов) для расчета heatmap
-      const normalLapTimes = laps
-        .map(l => l.time)
-        .filter(t => t && !isPitstopLap(t));
+       const normalLapTimes = laps
+         .map(l => l.time)
+         .filter(t => t && !isPitstopLap(t, threshold));
       
       const bestTime = normalLapTimes.length > 0 ? Math.min(...normalLapTimes) : 0;
       const worstTime = normalLapTimes.length > 0 ? Math.max(...normalLapTimes) : 0;
@@ -60,7 +61,7 @@ const LapSidebar = ({ driver, onClose }) => {
                 <li>Нет данных о кругах</li>
               ) : (
                 laps.map(lap => {
-                  const isPitstop = isPitstopLap(lap.time);
+                  const isPitstop = isPitstopLap(lap.time, threshold);
                   const lapColor = isPitstop 
                     ? getPitstopColor()
                     : getHeatmapColor(lap.time, heatmapBestTime, heatmapWorstTime, true);
