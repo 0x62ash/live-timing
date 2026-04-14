@@ -10,7 +10,6 @@ const App = () => {
     const [selectedDriver, setSelectedDriver] = useState(null);
     const [lastServerUpdate, setLastServerUpdate] = useState(Date.now());
     const [wsStatus, setWsStatus] = useState('disconnected');
-    const [reconnectAttempts, setReconnectAttempts] = useState(0);
     const [timeUntilNextReconnect, setTimeUntilNextReconnect] = useState(0);
     const wsRef = useRef(null);
     const reconnectTimeoutRef = useRef(null);
@@ -30,7 +29,6 @@ const App = () => {
     ws.onopen = () => {
       console.log('WebSocket соединение установлено');
       setWsStatus('connected');
-      setReconnectAttempts(0);
       setTimeUntilNextReconnect(0);
       
       // Если это реконнект - сбрасываем состояние гонки
@@ -151,7 +149,6 @@ return {
       isReconnectingRef.current = true;
       
       setTimeUntilNextReconnect(delay);
-      setReconnectAttempts(reconnectAttemptsRef.current + 1);
       
       reconnectTimeoutRef.current = setTimeout(() => {
         reconnectAttemptsRef.current += 1;
@@ -212,7 +209,7 @@ return {
     <div className="app-container">
       <WebSocketModal 
         wsStatus={wsStatus}
-        reconnectAttempts={reconnectAttempts}
+        reconnectAttempts={reconnectAttemptsRef.current}
         timeUntilNextReconnect={timeUntilNextReconnect}
         reconnectStartTime={reconnectStartTimeRef.current}
         maxReconnectTime={maxReconnectTime}
