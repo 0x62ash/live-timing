@@ -66,7 +66,7 @@ const App = () => {
             mode: data.mode, 
             elapsed: data.elapsed || 0, 
             drivers: data.drivers || [],
-            pitlaneKarts: data.pitlane_karts || []
+            pitlaneKarts: data.pitlaneKarts || []
           };
         }
 
@@ -117,7 +117,7 @@ const App = () => {
           mode: data.mode, 
           elapsed: data.elapsed, 
           drivers: Array.from(driversMap.values()),
-          pitlaneKarts: data.pitlane_karts || prevData.pitlaneKarts
+          pitlaneKarts: data.pitlaneKarts || prevData.pitlaneKarts
         };
       });
     };
