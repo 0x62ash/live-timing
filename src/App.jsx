@@ -10,8 +10,8 @@ import './App.css';
 const App = () => {
     const [raceData, setRaceData] = useState({ id: 0, name: '', elapsed: 0, drivers: [], pitlaneKarts: [], pitstopTimeThreshold: 50000 });
     const [selectedDriver, setSelectedDriver] = useState(null);
-    const [pitLoss, setPitLoss] = useState(25);
-    const [minStint, setMinStint] = useState(6);
+    const [pitLoss, setPitLoss] = useState(30);
+    const [minStint, setMinStint] = useState(10);
     const [lastServerUpdate, setLastServerUpdate] = useState(Date.now());
     const [wsStatus, setWsStatus] = useState('disconnected');
     const [timeUntilNextReconnect, setTimeUntilNextReconnect] = useState(0);
