@@ -26,6 +26,7 @@
     "test": "vitest",
     "test:run": "vitest run",
     "mock-server": "node tests/mock-ws-server.js",
-    "mock-server:fast": "node tests/mock-ws-server.js --delay 100"
+    "mock-server:fast": "node tests/mock-ws-server.js --delay 100",
+    "mock-server:track": "node tests/replay-track.js"
   }
 }

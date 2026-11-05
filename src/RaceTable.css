@@ -143,3 +143,25 @@ span.delta {
 }
 
 
+
+.driver-select { border: 0; padding: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.driver-select:focus-visible { outline: 2px solid #b9d9f7; outline-offset: 2px; }
+.driver-forecast { display: block; white-space: nowrap; font-size: 11px; line-height: 1.5; color: #aebbc5; font-variant-numeric: tabular-nums; }
+.driver-forecast__wait { white-space: nowrap; }
+.driver-forecast__wait-value { display: inline-block; width: 5.5ch; }
+.driver-forecast--wait { color: #ffaaa1; }
+.race-table tbody tr.driver-row--candidate {
+  outline: 2px dashed #f3dc88;
+  outline-offset: -2px;
+}
+.race-table tbody tr.driver-row--pit {
+  outline-style: solid;
+  outline-color: #ffaaa1;
+}
+@media (max-width: 600px) {
+  .driver-forecast__arrival { display: none; }
+  .race-table th, .race-table td { padding: 5px; }
+  .driver-select { max-width: 125px; overflow-wrap: anywhere; }
+  .driver-forecast { white-space: normal; }
+  .race-table .delta { display: inline-block; }
+}

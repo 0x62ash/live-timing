@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import RaceTable from './RaceTable.jsx';
+import TrackMap from './TrackMap.jsx';
+import useTrackModel from './hooks/useTrackModel.js';
 import LapSidebar from './LapSidebar.jsx';
 import Footer from './Footer.jsx';
 import WebSocketModal from './WebSocketModal.jsx';
@@ -8,6 +10,8 @@ import './App.css';
 const App = () => {
     const [raceData, setRaceData] = useState({ id: 0, name: '', elapsed: 0, drivers: [], pitlaneKarts: [], pitstopTimeThreshold: 50000 });
     const [selectedDriver, setSelectedDriver] = useState(null);
+    const [pitLoss, setPitLoss] = useState(25);
+    const [minStint, setMinStint] = useState(6);
     const [lastServerUpdate, setLastServerUpdate] = useState(Date.now());
     const [wsStatus, setWsStatus] = useState('disconnected');
     const [timeUntilNextReconnect, setTimeUntilNextReconnect] = useState(0);
@@ -17,6 +21,7 @@ const App = () => {
     const isReconnectingRef = useRef(false);
     const reconnectStartTimeRef = useRef(null);
     const maxReconnectTime = 600 * 1000;
+    const trackModel = useTrackModel(raceData, wsStatus === 'connected', pitLoss, minStint);
 
   const connectWebSocket = useCallback(() => {
     const dev = (new URLSearchParams(window.location.search)).get('dev');
@@ -54,15 +59,21 @@ const App = () => {
     ws.onmessage = (event) => {
       setLastServerUpdate(Date.now());
       const data = JSON.parse(event.data);
+      const receivedLocallyAt = Date.now();
       
       setRaceData((prevData) => {
         // Если изменился id заезда или prevData.id === 0 (после реконнекта) - сбрасываем данные
         if (data.id !== prevData.id) {
           console.log('Получены данные нового заезда (id:', data.id, '), сброс данных');
+          setSelectedDriver(null);
           return { 
             id: data.id, 
             name: data.name, 
-            mode: data.mode, 
+            mode: data.mode,
+            track: data.track ?? null,
+            direction: data.direction ?? null,
+            serverTime: data.serverTime ?? null,
+            receivedLocallyAt,
             elapsed: data.elapsed || 0, 
             drivers: data.drivers || [],
             pitlaneKarts: data.pitlaneKarts || [],
@@ -75,7 +86,7 @@ const App = () => {
           prevData.drivers.map(d => [d.driver.id, d])
         );
         
-        data.drivers.forEach(newDriver => {
+        (data.drivers || []).forEach(newDriver => {
           const existingDriver = driversMap.get(newDriver.driver.id);
           if (existingDriver) {
             // Обновляем существующего драйвера
@@ -105,17 +116,17 @@ const App = () => {
           return null;
         });
 
-        // Сервер не всегда может сообщать время, тогда пологаемся на свой таймер
-        if (!data.elapsed) {
-          data.elapsed = prevData.elapsed;
-        }
-
 return { 
             ...prevData, 
             id: data.id, 
             name: data.name, 
-            mode: data.mode, 
-            elapsed: data.elapsed, 
+            mode: data.mode,
+            track: data.track === undefined ? prevData.track : data.track,
+            direction: data.direction === undefined ? prevData.direction : data.direction,
+            serverTime: data.serverTime ?? prevData.serverTime,
+            receivedLocallyAt: data.serverTime == null ? prevData.receivedLocallyAt : receivedLocallyAt,
+            // Запоздавший пакет не должен откатывать локальный таймер.
+            elapsed: Math.max(prevData.elapsed, data.elapsed ?? prevData.elapsed),
             drivers: Array.from(driversMap.values()),
             pitlaneKarts: data.pitlaneKarts || prevData.pitlaneKarts,
             pitstopTimeThreshold: data.pitstopTimeThreshold !== null && data.pitstopTimeThreshold !== undefined ? data.pitstopTimeThreshold : prevData.pitstopTimeThreshold
@@ -225,14 +236,18 @@ return {
         </div>
       </header>
       <div className="main-content">
-        <RaceTable 
+        <div className="race-table-scroll"><RaceTable
           heatMode={raceData.mode} 
           drivers={raceData.drivers} 
           pitlaneKarts={raceData.pitlaneKarts}
           onDriverSelect={setSelectedDriver}
+          trackModel={trackModel}
           selectedDriver={selectedDriver}
           pitstopTimeThreshold={raceData.pitstopTimeThreshold}
-        />
+        /></div>
+        <TrackMap model={trackModel} direction={raceData.direction} selectedDriver={selectedDriver}
+          onDriverSelect={setSelectedDriver} pitLoss={pitLoss} onPitLossChange={setPitLoss}
+          minStint={minStint} onMinStintChange={setMinStint} />
         {selectedDriver && <LapSidebar driver={selectedDriver} onClose={() => setSelectedDriver(null)} pitstopTimeThreshold={raceData.pitstopTimeThreshold} />}
       </div>
       <Footer />

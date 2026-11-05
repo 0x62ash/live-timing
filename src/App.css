@@ -10,7 +10,7 @@ body {
   display: flex;
   flex-direction: column;
   width: auto;
-  overflow-x: auto;
+  min-width: 0;
   align-items: flex-start;
 }
 
@@ -105,3 +105,5 @@ body {
   }
 }
 
+
+.race-table-scroll { width: 100%; overflow-x: auto; }

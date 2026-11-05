@@ -1,5 +1,6 @@
 import React from 'react';
 import './RaceTable.css';
+import { seconds } from './utils/track-model.js';
 import { getDriverColor } from './utils/driver-colors';
 
 const formatLapTime = (milliseconds) => {
@@ -108,7 +109,7 @@ const PitlaneKartsRow = ({ isShowStint, pitlaneKarts }) => {
   );
 };
 
-const RaceTable = ({ heatMode, drivers, pitlaneKarts, onDriverSelect, selectedDriver, pitstopTimeThreshold }) => {
+const RaceTable = ({ heatMode, drivers, pitlaneKarts, onDriverSelect, trackModel, selectedDriver, pitstopTimeThreshold }) => {
   const lastLapTimes = drivers.filter(d => d.laps?.length > 0).map(d => d.laps[d.laps.length - 1].time);
   const currentBestTime = lastLapTimes.length > 0 ? Math.min(...lastLapTimes) : undefined;
   
@@ -150,16 +151,30 @@ const RaceTable = ({ heatMode, drivers, pitlaneKarts, onDriverSelect, selectedDr
       <tbody>
         {sortedDrivers.map((driver, index) => {
           const driverColor = getDriverColor(driver.driver.name);
+          const point = trackModel?.points.find(p => p.id === driver.driver.id);
+          const wait = trackModel?.connected ? trackModel.forecast?.waits.get(driver.driver.id) : null;
+          const showWait = Number.isFinite(wait) && Math.round(wait / 1000) > 0;
+          const candidate = trackModel?.forecast?.candidate.id === driver.driver.id;
+          const inPit = candidate && trackModel.forecast.status !== 'scenario';
           return (
           <tr 
             key={driver.driver.id} 
             onClick={() => onDriverSelect(driver)}
-            className={`driver-row ${selectedDriver?.driver.id === driver.driver.id ? 'selected' : ''} position-${index + 1}`}
+            className={`driver-row ${candidate ? 'driver-row--candidate' : ''} ${inPit ? 'driver-row--pit' : ''} ${selectedDriver?.driver.id === driver.driver.id ? 'selected' : ''} position-${index + 1}`}
+            title={inPit ? 'Предположительно на пите' : candidate ? 'Кандидат на заезд в питлейн' : undefined}
             style={{ '--driver-color': driverColor.rgb }}
           >
             <td>{driver.position}</td>
             <td>{driver.number}</td>
-            <td>{driver.driver.name}</td>
+            <td><button className="driver-select" aria-pressed={selectedDriver?.driver.id === driver.driver.id}
+              onClick={event => { event.stopPropagation(); onDriverSelect(driver); }}>{driver.driver.name}</button>
+              {trackModel?.enabled && <span className={`driver-forecast ${wait > 0 ? 'driver-forecast--wait' : ''}`}>
+                <span className="driver-forecast__arrival">До пита {seconds(trackModel.connected ? point?.eta : null)}<span style={{ visibility: showWait ? 'visible' : 'hidden' }}> · </span></span>
+                <span className="driver-forecast__wait" style={{ visibility: showWait ? 'visible' : 'hidden' }} aria-hidden={!showWait}>
+                  Ожидание <span className="driver-forecast__wait-value">{seconds(wait)}</span>
+                </span>
+              </span>}
+            </td>
             <td>{driver.laps?.length > 0 ? driver.laps[driver.laps.length - 1].number : '—'}</td>
             <td>{driver.laps?.length > 0 ? renderLapTime(driver, currentBestTime) : '—'}</td>
             { heatMode === 1 &&
